@@ -29,7 +29,27 @@ function Util() {
         return 
     }
 
-    return {calculateTotalDistributedPassengers, calculateTotalNumberOfPassengers, checkInput};
+    function calculateTotalDistance(arrayDistance){
+        let totalDistance = 0, distance = 0;
+
+        for (distance of arrayDistance){
+            if (distance < 0){
+                continue;
+            }
+            totalDistance += distance;
+        }
+
+        return totalDistance;
+    }
+
+    function calculateBonusPoints(businessDistancesArray, economyDistancesArray, businessBonus, economyBonus) {
+        let totalBusinessDistance = calculateTotalDistance(businessDistancesArray);
+        let totalEconomyDistance = calculateTotalDistance(economyDistancesArray);
+        let points = (businessBonus * totalBusinessDistance)/100 + (economyBonus * totalEconomyDistance)/100;
+        return points;
+     }
+
+    return {calculateTotalDistributedPassengers, calculateTotalNumberOfPassengers, checkInput, calculateTotalDistance, calculateBonusPoints};
 
 }
 
