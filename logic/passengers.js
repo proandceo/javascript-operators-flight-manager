@@ -12,58 +12,56 @@ function Passengers() {
         }
     }
 
-    function distributeAllSeatsToAllPassengers(vip, 
-                                            regular, 
-                                            numberOfFlights,
-                                            numberOfBusinessSeatsPerFlight, 
-                                            numberOfEconomySeatsPerFlight){
-        
-        distributeAllSeatsToAllPassengers.vipPassengersWithBusinessSeats = 0;
-        distributeAllSeatsToAllPassengers.vipPassengersWithEconomySeats = 0;
-        distributeAllSeatsToAllPassengers.regularPassengersWithBusinessSeats = 0;
-        distributeAllSeatsToAllPassengers.regularPassengersWithEconomySeats = 0;
+    function distributeAllSeatsToAllPassengers(vipPassengers, regularPassengers, nrOfFlights, 
+        businessSeatsPerFlight, economySeatsPerFlight) {
 
-        if ( vip - numberOfFlights * numberOfBusinessSeatsPerFlight > 0){
-            distributeAllSeatsToAllPassengers.vipPassengersWithBusinessSeats = numberOfFlights * numberOfBusinessSeatsPerFlight;
-            distributeAllSeatsToAllPassengers.vipPassengersWithEconomySeats = vip - distributeAllSeatsToAllPassengers.vipPassengersWithBusinessSeats;  
-        }else {
-            distributeAllSeatsToAllPassengers.vipPassengersWithBusinessSeats = vip;
-            distributeAllSeatsToAllPassengers.vipPassengersWithBusinessSeats += numberOfFlights * numberOfBusinessSeatsPerFlight - vip;
+        let vipPassengersWithBusinessSeats=0, vipPassengersWithEconomySeats=0, 
+        regularPassengersWithBusinessSeats=0, regularPassengersWithEconomySeats=0;
+        let availableBusinessSeats = nrOfFlights * businessSeatsPerFlight;
+        let availableEconomySeats = nrOfFlights * economySeatsPerFlight;
+
+        let vipBusinessConfiguration = {passengers:vipPassengers, seats:availableBusinessSeats};
+        vipPassengersWithBusinessSeats = updateConfiguration(vipBusinessConfiguration, businessSeatsPerFlight);
+
+        let vipEconomyConfiguration = {passengers:vipBusinessConfiguration.passengers, seats:availableEconomySeats};
+        vipPassengersWithEconomySeats = updateConfiguration(vipEconomyConfiguration, economySeatsPerFlight);
+
+        let regularBusinessConfiguration = {passengers:regularPassengers, seats:vipBusinessConfiguration.seats};
+        regularPassengersWithBusinessSeats = updateConfiguration(regularBusinessConfiguration, businessSeatsPerFlight);
+
+        let regularEconomyConfiguration = {passengers:regularBusinessConfiguration.passengers, seats:vipEconomyConfiguration.seats};
+        regularPassengersWithEconomySeats = updateConfiguration(regularEconomyConfiguration, economySeatsPerFlight);
+
+        return {vipPassengersWithBusinessSeats:vipPassengersWithBusinessSeats,
+                vipPassengersWithEconomySeats:vipPassengersWithEconomySeats, regularPassengersWithBusinessSeats:regularPassengersWithBusinessSeats,
+                regularPassengersWithEconomySeats:regularPassengersWithEconomySeats};
+    }
+
+    function updateConfiguration(configuration, seatsPerFlight) {
+        let passengersWithSeats = 0;
+        while (configuration.passengers > 0) {
+            if (configuration.seats > 0) {
+               if (configuration.passengers >= configuration.seats) {
+
+                    if (configuration.seats > configuration.seatsPerFlight) {
+                        configuration.passengers -= seatsPerFlight;
+                        configuration.seats -= seatsPerFlight;
+                        passengersWithSeats += seatsPerFlight;
+                    } else {
+                        configuration.passengers -= configuration.seats;
+                        passengersWithSeats += configuration.seats;
+                        configuration.seats = 0;
+                    }
+               } else {
+                    passengersWithSeats += configuration.passengers;
+                    configuration.seats -= configuration.passengers;
+                    configuration.passengers = 0;
+               }
+            } else {
+               break;
+            }
         }
-
-        // if (numberOfFlights * numberOfEconomySeatsPerFlight - distributeAllSeatsToAllPassengers.vipPassengersWithEconomySeats > 0){
-        //     distributeAllSeatsToAllPassengers.regularPassengersWithEconomySeats = regular - 
-        // }
-        
-
-        
-        // distributeAllSeatsToAllPassengers.vipPassengersWithBusinessSeats = vip;
-        // if (numberOfFlights * numberOfBusinessSeatsPerFlight - vip > 0){
-        //     distributeAllSeatsToAllPassengers.regularPassengersWithEconomySeats -= numberOfFlights * numberOfBusinessSeatsPerFlight - vip;
-        // }
-
-        // if ( vip > numberOfFlights * numberOfBusinessSeatsPerFlight){
-        //     distributeAllSeatsToAllPassengers.vipPassengersWithEconomySeats = (numberOfEconomySeatsPerFlight * numberOfFlights) - (numberOfFlights * numberOfBusinessSeatsPerFlight);
-        //     if (numberOfFlights * numberOfBusinessSeatsPerFlight - vip != 0){}
-        // }else {
-        //     distributeAllSeatsToAllPassengers.vipPassengersWithEconomySeats = 0;
-        // }
-        
-        // if(numberOfBusinessSeatsPerFlight * numberOfFlights - vip > 0){
-        //     distributeAllSeatsToAllPassengers.regularPassengersWithBusinessSeats = numberOfBusinessSeatsPerFlight*numberOfFlights - vip;
-        // } else {
-        //     distributeAllSeatsToAllPassengers.regularPassengersWithBusinessSeats = 0;
-        // }
-        // console.log("distributeAllSeatsToAllPassengers.regularPassengersWithEconomySeats " + distributeAllSeatsToAllPassengers.regularPassengersWithEconomySeats);
-
-
-        // console.log("numberOfEconomySeatsPerFlight * numberOfFlights " + numberOfEconomySeatsPerFlight * numberOfFlights);
-        // console.log("distributeAllSeatsToAllPassengers.vipPassengersWithEconomySeats " + distributeAllSeatsToAllPassengers.vipPassengersWithEconomySeats);
-        // console.log("distributeAllSeatsToAllPassengers.regularPassengersWithBusinessSeats " + distributeAllSeatsToAllPassengers.regularPassengersWithBusinessSeats);
-        // distributeAllSeatsToAllPassengers.regularPassengersWithEconomySeats = numberOfEconomySeatsPerFlight * numberOfFlights - (distributeAllSeatsToAllPassengers.vipPassengersWithEconomySeats + distributeAllSeatsToAllPassengers.regularPassengersWithBusinessSeats);
-
-
-        return distributeAllSeatsToAllPassengers;
+        return passengersWithSeats;
     }
     return {checkFlightCapacity, distributeAllSeatsToAllPassengers};
 }
