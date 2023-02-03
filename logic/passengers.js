@@ -31,9 +31,9 @@ function Passengers() {
             distributeAllSeatsToAllPassengers.vipPassengersWithBusinessSeats += numberOfFlights * numberOfBusinessSeatsPerFlight - vip;
         }
 
-        if (numberOfFlights * numberOfEconomySeatsPerFlight - distributeAllSeatsToAllPassengers.vipPassengersWithEconomySeats > 0){
-            distributeAllSeatsToAllPassengers.regularPassengersWithEconomySeats = regular - 
-        }
+        // if (numberOfFlights * numberOfEconomySeatsPerFlight - distributeAllSeatsToAllPassengers.vipPassengersWithEconomySeats > 0){
+        //     distributeAllSeatsToAllPassengers.regularPassengersWithEconomySeats = regular - 
+        // }
         
 
         
