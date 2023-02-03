@@ -17,7 +17,19 @@ function Util() {
         return sum
     }
 
-    return {calculateTotalDistributedPassengers, calculateTotalNumberOfPassengers};
+    function checkInput(i){
+        if (!input){
+            throw new Error("");
+        }
+
+        if (isNaN(input)){
+            throw new Error("");
+        }
+
+        return 
+    }
+
+    return {calculateTotalDistributedPassengers, calculateTotalNumberOfPassengers, checkInput};
 
 }
 

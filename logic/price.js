@@ -7,16 +7,27 @@ function Prices() {
         return sum;
     }
 
-    function checkInput(i){
-        if (i === ''){
-            throw "The input should not be empty";
-        }else if (Number.isInteger(i)){
-            throw "The input should be a number"
+    function calculateDefaultFinalPrice(basePrice, passengerType, flightType){
+        let finalPrice = basePrice;
+
+        switch(passengerType.toUpperCase()) {
+            case 'REGULAR': finalPrice *=  0.95;
+               break;
+            case 'VIP': finalPrice *= 1.05;
+               break;
         }
 
-        return 
+        switch(flightType.toUpperCase()) {
+            case 'ECONOMY': finalPrice *= 0.97;
+               break;
+            case 'BUSINESS': finalPrice *= 1.1;
+               break;
+        }
+
+        return finalPrice.toFixed(2);
+
     }
 
-    return {calculateFinalPrice, checkInput};
+    return {calculateFinalPrice, calculateDefaultFinalPrice};
 }
 module.exports = Prices();
